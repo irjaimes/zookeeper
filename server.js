@@ -5,12 +5,12 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 
 function filterByQuery(query, animalsArray) {
-    // Save personalityTraits as a dedicated array.
+    // Since they are in an array, save personalityTraits as a dedicated array
     let personalityTraitsArray = [];
     // Note that we save the animalsArray as filteredResults here:
     let filteredResults = animalsArray;
-    if (query.personalityTraits) {
 
+    if (query.personalityTraits) {
         // If personalityTraits is a string, place it into a new array and save.
         if (typeof query.personalityTraits === 'string') {
             personalityTraitsArray = [query.personalityTraits];
@@ -19,13 +19,9 @@ function filterByQuery(query, animalsArray) {
         }
         // Loop through each trait in the personalityTraits array:
         personalityTraitsArray.forEach(trait => {
-            // Check the trait against each animal in the filteredResults array.
-            // Remember, it is initially a copy of the animalsArray,
-            // but here we're updating it for each trait in the .forEach() loop.
-            // For each trait being targeted by the filter, the filteredResults
-            // array will then contain only the entries that contain the trait,
-            // so at the end we'll have an array of animals that have every one 
-            // of the traits when the .forEach() loop is finished.
+            /*Check the trait against each animal in the filteredResults array.
+            Remember, it is initially a copy of the animalsArray, but here we're updating it for each trait in the .forEach() loop.
+            For each trait being targeted by the filter, the filteredResults array will then contain only the entries that contain the trait, so at the end we'll have an array of animals that have every one of the traits when the .forEach() loop is finished.*/
             filteredResults = filteredResults.filter(
                 animal => animal.personalityTraits.indexOf(trait) !== -1
             );
@@ -52,20 +48,21 @@ app.get('/api/animals', (req, res) => {
     let results = animals;
     // takes req.query as argument and filters thru the animals accordingly, returning a new filtered arr
     if (req.query) {
+        // call the filterByQuery() pass req.query and results as argument
         results = filterByQuery(req.query, results);
     }
     res.json(results);
 });
 
-app.get('/api/animals/:id', (req, res) => {
-    const result = findById(req.params.id, animals);
-    if (result) {
-        res.json(result);
-    } else {
-        res.send(404);
-        console.log('this find by id is working')
-    }
-});
+// app.get('/api/animals/:id', (req, res) => {
+//     const result = findById(req.params.id, animals);
+//     if (result) {
+//         res.json(result);
+//     } else {
+//         res.send(404);
+//         console.log('this find by id is working')
+//     }
+// });
 
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`);
