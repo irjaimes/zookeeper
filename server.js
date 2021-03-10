@@ -10,8 +10,13 @@ const app = express();
 // parse incoming string or array data
 app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
-app.use(express.json()); 
+app.use(express.json());
+app.use(express.static('public'));
 
+
+
+
+// Functions to handle queries and creating new animal objects
 function filterByQuery(query, animalsArray) {
     // Since they are in an array, save personalityTraits as a dedicated array
     let personalityTraitsArray = [];
@@ -60,29 +65,29 @@ function createNewAnimal(body, animalsArray) {
     animalsArray.push(animal);
     // write to animals json by using fs method
     fs.writeFileSync(path.join(__dirname, '/data/animals.json'),
-    JSON.stringify({ animals: animalsArray }, null, 2));
+        JSON.stringify({ animals: animalsArray }, null, 2));
 
     //return newly created animal
     return animal;
 }
 
 function validateAnimal(animal) {
-    if(!animal.name || typeof animal.name !== 'string'){
+    if (!animal.name || typeof animal.name !== 'string') {
         return false;
     }
-    if(!animal.species || typeof animal.species !== 'string'){
+    if (!animal.species || typeof animal.species !== 'string') {
         return false;
     }
-    if(!animal.diet || typeof animal.diet !== 'string') {
+    if (!animal.diet || typeof animal.diet !== 'string') {
         return false;
     }
-    if(!animal.personalityTraits || !Array.isArray(animal.personalityTraits)){
+    if (!animal.personalityTraits || !Array.isArray(animal.personalityTraits)) {
         return false;
     }
     return true;
 }
 
-
+// GET & POST routes
 app.get('/api/animals', (req, res) => {
     let results = animals;
     // takes req.query as argument and filters thru the animals accordingly, returning a new filtered arr
@@ -108,16 +113,29 @@ app.post('/api/animals', (req, res) => {
     req.body.id = animals.length.toString();
 
     // if any data in req.body is incorrect, send 400 error back
-    if(!validateAnimal(req.body)){
+    if (!validateAnimal(req.body)) {
         res.status(400).send('The animal is not properly formatted.');
     }
-    else{
-    // create animal 
-    const animal = createNewAnimal(req.body, animals);
-    res.json(animal);
-    } 
+    else {
+        // create animal 
+        const animal = createNewAnimal(req.body, animals);
+        res.json(animal);
+    }
 });
 
+// GET request from root route to serve index.html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+app.get('/animals', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+app.get('/zookeepers', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+  });
+
+// Server listener
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`);
 });

@@ -126,6 +126,40 @@
         "hungry"
       ],
       "id": "12"
+    },
+    {
+      "name": "Carl",
+      "species": "orangutan",
+      "diet": "omnivore",
+      "personalityTraits": [
+        "hungry"
+      ],
+      "id": "13"
+    },
+    {
+      "name": "Carl",
+      "species": "orangutan",
+      "diet": "omnivore",
+      "personalityTraits": [
+        "hungry"
+      ],
+      "id": "14"
+    },
+    {
+      "name": "tiny",
+      "species": "elephant",
+      "diet": "herbivore",
+      "personalityTraits": [],
+      "id": "15"
+    },
+    {
+      "name": "tom",
+      "species": "mouse",
+      "diet": "herbivore",
+      "personalityTraits": [
+        "zany"
+      ],
+      "id": "16"
     }
   ]
 }
